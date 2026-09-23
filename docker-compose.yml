@@ -3,8 +3,9 @@ version: '3.8'
 services:
   redis:
     image: redis:7-alpine
+    command: redis-server --port 6341
     ports:
-      - "6379:6379"
+      - "6341:6341"
     volumes:
       - redis_data:/data
     restart: unless-stopped
@@ -13,9 +14,9 @@ services:
     build:
       context: ./backend
     ports:
-      - "8000:8000"
+      - "8041:8041"
     environment:
-      - REDIS_URL=redis://redis:6379/0
+      - REDIS_URL=redis://redis:6341/0
     env_file:
       - .env
     depends_on:
@@ -26,7 +27,7 @@ services:
     build:
       context: ./frontend
     ports:
-      - "3000:80"
+      - "3041:80"
     depends_on:
       - backend
     restart: unless-stopped

@@ -70,8 +70,8 @@ docker compose up --build -d
 ```
 
 ### 3. Access
-- **Command Center HUD:** `http://localhost:3000`
-- **Backend API & Swagger Docs:** `http://localhost:8000/docs`
+- **Command Center HUD:** `http://localhost:3041`
+- **Backend API & Swagger Docs:** `http://localhost:8041/docs`
 
 ---
 
