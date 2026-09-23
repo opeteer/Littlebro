@@ -64,9 +64,9 @@ async def websocket_endpoint(websocket: WebSocket):
         logger.error(f"WebSocket error: {e}")
         manager.disconnect(websocket)
 
-from modules.conflict_heatmap import fetch_conflict_data
+from modules.conflict_live_aggregator import get_dynamic_conflict_geojson
 
 @app.get("/api/v1/telemetry/conflict")
 async def get_conflict_heatmap():
-    data = await fetch_conflict_data()
+    data = await get_dynamic_conflict_geojson()
     return data
