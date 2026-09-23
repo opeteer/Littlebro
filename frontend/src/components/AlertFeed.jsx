@@ -52,7 +52,7 @@ const AlertFeed = ({ onAlertClick, onOpenVideo, streamMessage }) => {
   }, [streamMessage]);
 
   return (
-    <div className="absolute top-4 right-4 z-10 w-80 pointer-events-auto flex flex-col gap-2">
+    <div className="absolute top-4 right-4 z-20 w-80 max-h-[45vh] overflow-y-auto pointer-events-auto flex flex-col gap-2 p-1 shadow-[0_0_20px_rgba(0,0,0,0.8)]">
       {alerts.map(alert => {
         const bgClass = alert.severity === 'CRITICAL' ? 'bg-red-900/80 border-red-500 shadow-[0_0_15px_rgba(255,0,0,0.3)]' :
                         alert.severity === 'HIGH' ? 'bg-orange-900/80 border-orange-500 shadow-[0_0_15px_rgba(255,165,0,0.2)]' :

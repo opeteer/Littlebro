@@ -5,7 +5,8 @@ const PhotogrammetryDesk = ({
   isPickingOnMap, 
   onTogglePickOnMap, 
   pickedCoords, 
-  onCalculateShadow 
+  onCalculateShadow,
+  onOpenStateChange
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [lat, setLat] = useState('34.0522');
@@ -13,6 +14,11 @@ const PhotogrammetryDesk = ({
   const [timestamp, setTimestamp] = useState(new Date().toISOString().slice(0, 16));
   const [height, setHeight] = useState('3.2');
   const [result, setResult] = useState(null);
+
+  const toggleOpen = (state) => {
+    setIsOpen(state);
+    if (onOpenStateChange) onOpenStateChange(state);
+  };
 
   // Sync when user picks a point directly on the map
   useEffect(() => {
@@ -53,8 +59,8 @@ const PhotogrammetryDesk = ({
   if (!isOpen) {
     return (
       <button 
-        onClick={() => setIsOpen(true)}
-        className="absolute bottom-4 right-4 z-10 bg-hud-bg/80 border border-hud-border p-2 px-4 rounded text-hud-accent font-mono text-sm hover:bg-hud-border transition-colors backdrop-blur-sm pointer-events-auto flex items-center gap-2 shadow-[0_0_15px_rgba(0,255,204,0.15)]"
+        onClick={() => toggleOpen(true)}
+        className="absolute bottom-4 right-4 z-20 bg-hud-bg/90 border border-hud-border p-2 px-4 rounded text-hud-accent font-mono text-sm hover:bg-hud-border transition-colors backdrop-blur-sm pointer-events-auto flex items-center gap-2 shadow-[0_0_15px_rgba(0,255,204,0.15)]"
       >
         <span>📐 PHOTOGRAMMETRY DESK</span>
       </button>
@@ -62,13 +68,13 @@ const PhotogrammetryDesk = ({
   }
 
   return (
-    <div className="absolute bottom-4 right-4 z-10 bg-hud-bg/95 border border-hud-border p-4 rounded text-gray-200 font-mono text-xs w-84 shadow-[0_0_25px_rgba(0,0,0,0.9)] backdrop-blur-md pointer-events-auto flex flex-col max-h-[85vh] overflow-y-auto">
+    <div className="absolute bottom-4 right-4 z-20 bg-hud-bg/95 border border-hud-border p-4 rounded text-gray-200 font-mono text-xs w-84 shadow-[0_0_25px_rgba(0,0,0,0.9)] backdrop-blur-md pointer-events-auto flex flex-col max-h-[85vh] overflow-y-auto">
       {/* Header */}
       <div className="flex justify-between items-center mb-3 border-b border-hud-border pb-2">
         <h2 className="text-hud-accent font-bold tracking-wider flex items-center gap-1.5 text-sm uppercase">
           <span>📐 Photogrammetry Calc</span>
         </h2>
-        <button onClick={() => setIsOpen(false)} className="text-gray-500 hover:text-white text-xs font-bold">[ X ]</button>
+        <button onClick={() => toggleOpen(false)} className="text-gray-500 hover:text-white text-xs font-bold">[ X ]</button>
       </div>
       
       {/* Input Form */}

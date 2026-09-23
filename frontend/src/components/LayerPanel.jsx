@@ -37,7 +37,7 @@ const LayerPanel = ({ activeLayers, toggleLayer }) => {
     return (
       <button 
         onClick={() => setIsOpen(true)}
-        className="absolute top-20 left-4 z-10 bg-hud-bg/90 border border-hud-border p-2 rounded text-hud-accent shadow-[0_0_10px_rgba(0,255,204,0.2)] backdrop-blur text-xs font-bold pointer-events-auto hover:bg-gray-800"
+        className="absolute top-[13.5rem] left-4 z-20 bg-hud-bg/90 border border-hud-border p-2 rounded text-hud-accent shadow-[0_0_10px_rgba(0,255,204,0.2)] backdrop-blur text-xs font-bold pointer-events-auto hover:bg-gray-800"
       >
         LAYERS ⏵
       </button>
@@ -45,7 +45,7 @@ const LayerPanel = ({ activeLayers, toggleLayer }) => {
   }
 
   return (
-    <div className="absolute top-20 left-4 z-10 bg-hud-bg/90 border border-hud-border p-4 rounded w-64 shadow-[0_0_15px_rgba(0,0,0,0.8)] backdrop-blur-md pointer-events-auto flex flex-col max-h-[70vh] overflow-y-auto">
+    <div className="absolute top-[13.5rem] left-4 z-20 bg-hud-bg/90 border border-hud-border p-4 rounded w-64 shadow-[0_0_15px_rgba(0,0,0,0.8)] backdrop-blur-md pointer-events-auto flex flex-col max-h-[50vh] overflow-y-auto">
       <div className="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
         <h2 className="text-hud-accent font-bold text-sm tracking-widest uppercase">Layer Control</h2>
         <button onClick={() => setIsOpen(false)} className="text-gray-500 hover:text-white text-xs">[ - ]</button>

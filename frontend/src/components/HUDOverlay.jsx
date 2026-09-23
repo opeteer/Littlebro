@@ -2,10 +2,10 @@ import React from 'react';
 
 const HUDOverlay = ({ isWsConnected, onOpenLogs }) => {
   return (
-    <div className="absolute top-0 left-0 w-full z-10 pointer-events-none p-4 flex justify-between items-start">
-      <div className="bg-hud-bg/80 border border-hud-border p-4 rounded text-hud-accent shadow-[0_0_15px_rgba(0,255,204,0.1)] pointer-events-auto backdrop-blur-sm flex flex-col gap-2">
-        <h1 className="text-xl font-bold tracking-widest uppercase">Littlebro // Global</h1>
-        <p className="text-xs text-hud-accent/90 italic font-semibold mt-0.5">"Our kiddo's playing with OSINT"</p>
+    <div className="absolute top-4 left-4 z-30 pointer-events-auto">
+      <div className="bg-hud-bg/90 border border-hud-border p-3.5 rounded text-hud-accent shadow-[0_0_15px_rgba(0,255,204,0.15)] backdrop-blur-md flex flex-col gap-2 w-64">
+        <h1 className="text-lg font-bold tracking-widest uppercase leading-none">Littlebro // Global</h1>
+        <p className="text-[11px] text-hud-accent/90 italic font-semibold">- "Our kiddo's playing with OSINT"</p>
         
         <div className="mt-2 flex flex-col gap-2">
           <div 

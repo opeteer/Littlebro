@@ -20,6 +20,7 @@ function App() {
   const [isPickingOnMap, setIsPickingOnMap] = useState(false);
   const [pickedCoords, setPickedCoords] = useState(null);
   const [shadowVector, setShadowVector] = useState(null);
+  const [isPhotoDeskOpen, setIsPhotoDeskOpen] = useState(false);
 
   const { isConnected, lastMessage } = useWebSocketStream();
   const [activeLayers, setActiveLayers] = useState({
@@ -57,9 +58,10 @@ function App() {
         onTogglePickOnMap={() => setIsPickingOnMap(!isPickingOnMap)}
         pickedCoords={pickedCoords}
         onCalculateShadow={(vectorData) => setShadowVector(vectorData)}
+        onOpenStateChange={setIsPhotoDeskOpen}
       />
       <MapLegend />
-      <MediaPerceptionWidget />
+      <MediaPerceptionWidget isPhotoDeskOpen={isPhotoDeskOpen} />
 
       {/* Main Map */}
       <div className="flex-1 relative z-0">
