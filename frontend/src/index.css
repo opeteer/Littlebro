@@ -8,3 +8,50 @@ body {
   overflow: hidden;
   background-color: #080b11;
 }
+
+/* Marquee Animation for Live Ticker */
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 30s linear infinite;
+}
+
+/* Custom MapLibre Popup Styling for Dark HUD Theme */
+.maplibregl-popup-content {
+  background-color: rgba(8, 11, 17, 0.95) !important;
+  border: 1px solid #1f2937 !important;
+  border-radius: 4px !important;
+  box-shadow: 0 0 15px rgba(0, 255, 204, 0.1) !important;
+  color: #e5e7eb !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  padding: 12px !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+.maplibregl-popup-anchor-bottom .maplibregl-popup-tip {
+  border-top-color: rgba(8, 11, 17, 0.95) !important;
+}
+.maplibregl-popup-anchor-top .maplibregl-popup-tip {
+  border-bottom-color: rgba(8, 11, 17, 0.95) !important;
+}
+.maplibregl-popup-anchor-left .maplibregl-popup-tip {
+  border-right-color: rgba(8, 11, 17, 0.95) !important;
+}
+.maplibregl-popup-anchor-right .maplibregl-popup-tip {
+  border-left-color: rgba(8, 11, 17, 0.95) !important;
+}
+
+.maplibregl-popup-close-button {
+  color: #9ca3af !important;
+  font-size: 16px !important;
+  padding: 4px 8px !important;
+}
+.maplibregl-popup-close-button:hover {
+  background-color: transparent !important;
+  color: #fff !important;
+}

@@ -17,12 +17,6 @@ const HUDOverlay = () => {
           </div>
         </div>
       </div>
-      
-      {/* Alert Banner Example */}
-      <div className="bg-red-900/80 border border-red-500 p-2 px-4 rounded text-white shadow-[0_0_15px_rgba(255,0,0,0.3)] pointer-events-auto backdrop-blur-sm animate-pulse flex flex-col items-end">
-        <span className="text-xs font-bold tracking-wider">WARN: GNSS ANOMALY</span>
-        <span className="text-[10px]">High Interference Detected (NACp &lt; 4)</span>
-      </div>
     </div>
   );
 };
