@@ -55,3 +55,7 @@ body {
   background-color: transparent !important;
   color: #fff !important;
 }
+
+.map-hover-popup {
+  pointer-events: none !important;
+}
