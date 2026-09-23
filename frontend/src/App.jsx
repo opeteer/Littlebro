@@ -12,9 +12,11 @@ function App() {
   const [activeLayers, setActiveLayers] = useState({
     earthquakes: true,
     war: true,
-    aviation: false,
-    firms: false,
-    gnss: false
+    aviation: true,
+    gnss: true,
+    firms: true,
+    bgp: true,
+    news: true
   });
 
   const toggleLayer = (layerId) => {
