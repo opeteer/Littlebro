@@ -29,7 +29,11 @@ async def lifespan(app: FastAPI):
     await redis_client.close()
     scheduler.stop_scheduler()
 
-app = FastAPI(title="Littlebro Geospatial Telemetry Platform", lifespan=lifespan)
+app = FastAPI(
+    title="Littlebro Geospatial Telemetry Platform",
+    description="Our kiddo's playing with OSINT",
+    lifespan=lifespan
+)
 
 # CORS Setup
 origins = settings.FRONTEND_CORS_ORIGINS.split(",")

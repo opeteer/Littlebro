@@ -1,5 +1,6 @@
 # 🌐 Littlebro 
-> **High-Scale Real-Time Geospatial Anomaly Analysis & Open Telemetry Dashboard**
+> **"Our kiddo's playing with OSINT"**
+> *High-Scale Real-Time Geospatial Anomaly Analysis & Open Telemetry Dashboard*
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)
@@ -80,4 +81,4 @@ docker compose up --build -d
 This software is released under the MIT License. It relies entirely on publicly accessible, open-source APIs and telemetry feeds. Littlebro is designed strictly for defensive intelligence, transparency, and humanitarian oversight.
 
 ---
-> *“Veritas vos liberabit.”* — Built with extreme engineering rigor by [@opeteer](https://github.com/opeteer).
+> *“Our kiddo's playing with OSINT”* — Built with extreme engineering rigor by [@opeteer](https://github.com/opeteer).
