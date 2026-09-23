@@ -404,24 +404,58 @@ const MapContainer = ({ focusedLocation, activeLayers, streamMessage, onOpenVide
         });
       };
 
+      // --- HOVER & CLICK HANDLERS FOR ALL TELEMETRY MODULES ---
+
       setupHover('aviation-circles', (p) => `
         <div style="color:#00ffcc; font-weight:bold;">✈️ AIRCRAFT: ${p.callsign}</div>
         <div>Model: ${p.aircraft} | Alt: ${p.alt}</div>
         <div>Speed: ${p.spd} | Route: ${p.route}</div>
+        <div style="color:#00ffcc; font-size:9px; margin-top:2px;">[Click for Aviation Cam 🎥]</div>
       `);
+
+      map.on('click', 'aviation-circles', (e) => {
+        if (!e.features || !e.features.length) return;
+        const p = e.features[0].properties;
+        if (onOpenVideo) {
+          onOpenVideo({
+            type: 'aviation',
+            event_type: 'Aviation Flight Radar',
+            title: `AIRCRAFT: ${p.callsign} (${p.aircraft})`,
+            location: p.route,
+            time: 'LIVE ATC',
+            source: 'Global Airspace Telemetry'
+          });
+        }
+      });
 
       setupHover('gnss-fill', (p) => `
         <div style="color:#ffaa00; font-weight:bold;">⚠️ GNSS JAMMING: ${p.name}</div>
         <div>Severity: ${p.severity}</div>
         <div>Type: ${p.type}</div>
+        <div style="color:#ffaa00; font-size:9px; margin-top:2px;">[Click for Cyber Radar Cam 🎥]</div>
       `);
+
+      map.on('click', 'gnss-fill', (e) => {
+        if (!e.features || !e.features.length) return;
+        const p = e.features[0].properties;
+        if (onOpenVideo) {
+          onOpenVideo({
+            type: 'gnss',
+            event_type: 'GPS RF Interference',
+            title: `GNSS JAMMING: ${p.name}`,
+            location: p.name,
+            time: 'CRITICAL',
+            source: 'RF Cyber Radar'
+          });
+        }
+      });
 
       setupHover('conflict-circles', (p) => `
         <div style="color:#ff4444; font-weight:bold;">⚔️ WAR ZONE: ${p.name}</div>
         <div>Event: ${p.event_type}</div>
         <div>Intensity: ${((p.intensity || 0.8) * 100).toFixed(0)}%</div>
         <div style="color:#9ca3af; font-size:9px;">Source: ${p.source || 'Live Telemetry'} (${p.time})</div>
-        <div style="color:#ffaa00; font-size:9px; margin-top:2px;">[Click to Watch Video Stream 🎥]</div>
+        <div style="color:#ff4444; font-size:9px; margin-top:2px;">[Click for War Zone Stream 🎥]</div>
       `);
 
       map.on('click', 'conflict-circles', (e) => {
@@ -429,10 +463,12 @@ const MapContainer = ({ focusedLocation, activeLayers, streamMessage, onOpenVide
         const p = e.features[0].properties;
         if (onOpenVideo) {
           onOpenVideo({
+            type: 'war',
+            event_type: p.event_type || 'Airstrike',
             title: `${p.name}: ${p.event_type}`,
             location: p.name,
             time: p.time,
-            source: p.source || "Live OSINT Stream"
+            source: p.source || "Al Jazeera / OSINT Stream"
           });
         }
       });
@@ -441,24 +477,88 @@ const MapContainer = ({ focusedLocation, activeLayers, streamMessage, onOpenVide
         <div style="color:#ff6600; font-weight:bold;">🔥 THERMAL ANOMALY</div>
         <div>FRP: ${p.frp} MW | Temp: ${p.temp}</div>
         <div>Sensor: ${p.sat}</div>
+        <div style="color:#ff6600; font-size:9px; margin-top:2px;">[Click for NASA Satellite Stream 🎥]</div>
       `);
+
+      map.on('click', 'firms-circles', (e) => {
+        if (!e.features || !e.features.length) return;
+        const p = e.features[0].properties;
+        if (onOpenVideo) {
+          onOpenVideo({
+            type: 'thermal',
+            event_type: 'Kinetic Thermal Anomaly',
+            title: `THERMAL ANOMALY: ${p.frp} MW`,
+            location: 'Satellite Infrared Region',
+            time: 'NASA VIIRS',
+            source: 'NASA TV Satellite Stream'
+          });
+        }
+      });
 
       setupHover('bgp-circles', (p) => `
         <div style="color:#a855f7; font-weight:bold;">📡 BGP OUTAGE: ${p.hub}</div>
         <div>Drop: ${p.drop} | ASN: ${p.asn}</div>
         <div>Status: ${p.status}</div>
+        <div style="color:#a855f7; font-size:9px; margin-top:2px;">[Click for Tech Cyber Stream 🎥]</div>
       `);
+
+      map.on('click', 'bgp-circles', (e) => {
+        if (!e.features || !e.features.length) return;
+        const p = e.features[0].properties;
+        if (onOpenVideo) {
+          onOpenVideo({
+            type: 'bgp',
+            event_type: 'BGP Routing Outage',
+            title: `BGP OUTAGE: ${p.hub} (${p.drop})`,
+            location: p.hub,
+            time: 'CRITICAL',
+            source: 'Cyber Infrastructure Broadcast'
+          });
+        }
+      });
 
       setupHover('news-circles', (p) => `
         <div style="color:#3b82f6; font-weight:bold;">🌐 OSINT NEWS FEED</div>
         <div>${p.headline}</div>
         <div style="color:#9ca3af; font-size:9px;">Source: ${p.source} (${p.time})</div>
+        <div style="color:#3b82f6; font-size:9px; margin-top:2px;">[Click for News Video Stream 🎥]</div>
       `);
+
+      map.on('click', 'news-circles', (e) => {
+        if (!e.features || !e.features.length) return;
+        const p = e.features[0].properties;
+        if (onOpenVideo) {
+          onOpenVideo({
+            type: 'news',
+            event_type: 'Global News Feed',
+            title: p.headline,
+            location: p.source,
+            time: p.time,
+            source: p.source
+          });
+        }
+      });
 
       setupHover('unclustered-point', (p) => `
         <div style="color:#00ffcc; font-weight:bold;">🌋 EARTHQUAKE</div>
         <div>Mag: ${p.mag} | Loc: ${p.place}</div>
+        <div style="color:#00ffcc; font-size:9px; margin-top:2px;">[Click for Seismic Disaster Stream 🎥]</div>
       `);
+
+      map.on('click', 'unclustered-point', (e) => {
+        if (!e.features || !e.features.length) return;
+        const p = e.features[0].properties;
+        if (onOpenVideo) {
+          onOpenVideo({
+            type: 'seismic',
+            event_type: 'Earthquake Hazard',
+            title: `USGS EARTHQUAKE: Mag ${p.mag} - ${p.place}`,
+            location: p.place,
+            time: 'USGS Feed',
+            source: 'Global Seismic Early Warning'
+          });
+        }
+      });
     });
   }, []);
 

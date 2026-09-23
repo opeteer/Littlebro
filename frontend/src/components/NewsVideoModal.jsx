@@ -1,10 +1,13 @@
 import React from 'react';
+import { getVideoStreamContext } from '../utils/videoStreamMapper';
 
 const NewsVideoModal = ({ videoData, onClose }) => {
   if (!videoData) return null;
 
-  // Default to Al Jazeera English Live Stream if no specific embed ID is passed
-  const videoEmbedUrl = videoData.embedUrl || "https://www.youtube.com/embed/gCNeDWCI0vo?autoplay=1&mute=0";
+  const context = getVideoStreamContext(videoData);
+  const videoEmbedUrl = videoData.embedUrl || context.embedUrl;
+  const networkName = videoData.network || context.network;
+  const categoryTitle = videoData.category || context.category;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 pointer-events-auto">
@@ -13,7 +16,7 @@ const NewsVideoModal = ({ videoData, onClose }) => {
         <div className="bg-black/90 border-b border-hud-border px-4 py-2 flex justify-between items-center text-hud-accent">
           <div className="flex items-center gap-2 text-xs font-bold tracking-widest uppercase">
             <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
-            <span>LIVE NEWS VIDEO FEED // OSINT STREAM</span>
+            <span>{categoryTitle}</span>
           </div>
           <button 
             onClick={onClose} 
@@ -46,9 +49,9 @@ const NewsVideoModal = ({ videoData, onClose }) => {
           </div>
           
           <div className="grid grid-cols-3 gap-2 text-[11px] text-gray-300 mt-1">
-            <div>📍 <strong>Location:</strong> {videoData.location || "Gaza / Eastern Front"}</div>
-            <div>📡 <strong>Network:</strong> {videoData.source || "Al Jazeera / DW News"}</div>
-            <div>🕒 <strong>Timestamp:</strong> {videoData.time || "LIVE 24/7"}</div>
+            <div>📍 <strong>Location:</strong> {videoData.location || "Global Coordinates"}</div>
+            <div>📡 <strong>Network:</strong> {videoData.source || networkName}</div>
+            <div>🕒 <strong>Timestamp:</strong> {videoData.time || "LIVE STREAM"}</div>
           </div>
         </div>
       </div>
