@@ -11,9 +11,12 @@ import NewsVideoModal from './components/NewsVideoModal';
 import MediaPerceptionWidget from './components/MediaPerceptionWidget';
 import { useWebSocketStream } from './hooks/useWebSocketStream';
 
+import SystemLogModal from './components/SystemLogModal';
+
 function App() {
   const [focusedLocation, setFocusedLocation] = useState(null);
   const [videoModalData, setVideoModalData] = useState(null);
+  const [isLogModalOpen, setIsLogModalOpen] = useState(false);
   const { isConnected, lastMessage } = useWebSocketStream();
   const [activeLayers, setActiveLayers] = useState({
     earthquakes: true,
@@ -31,7 +34,10 @@ function App() {
 
   return (
     <div className="w-screen h-screen relative bg-hud-bg overflow-hidden flex flex-col">
-      <HUDOverlay isWsConnected={isConnected} />
+      <HUDOverlay 
+        isWsConnected={isConnected} 
+        onOpenLogs={() => setIsLogModalOpen(true)}
+      />
       
       {/* Side Panels */}
       <LayerPanel activeLayers={activeLayers} toggleLayer={toggleLayer} />
@@ -63,6 +69,12 @@ function App() {
       <NewsVideoModal 
         videoData={videoModalData} 
         onClose={() => setVideoModalData(null)} 
+      />
+
+      {/* System Activity Logs Pop-Up Window */}
+      <SystemLogModal 
+        isOpen={isLogModalOpen} 
+        onClose={() => setIsLogModalOpen(false)} 
       />
     </div>
   );
