@@ -2,7 +2,9 @@ import React from 'react';
 
 const LiveTicker = () => {
   const newsItems = [
+    "CONFLICT: GDELT reports intense artillery shelling in Eastern Front",
     "OPEN-SKY: VIP Flight HXZ-99 detected deviating from flight path at 10:45Z",
+    "CONFLICT: Urban combat escalated in Khartoum sector 4",
     "SEISMIC: USGS confirms depth 0.2km tremor in industrial zone",
     "BGP: Traffic drop 45% observed in Eastern Europe routing nodes",
     "THERMAL: NASA FIRMS reports 15 new hotspots exceeding 500MW FRP",

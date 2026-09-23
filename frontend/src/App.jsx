@@ -11,6 +11,7 @@ function App() {
   const [focusedLocation, setFocusedLocation] = useState(null);
   const [activeLayers, setActiveLayers] = useState({
     earthquakes: true,
+    war: true,
     aviation: false,
     firms: false,
     gnss: false

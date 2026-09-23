@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 
 const AlertFeed = ({ onAlertClick }) => {
   const [alerts] = useState([
+    { id: 0, type: 'WAR_ZONE', severity: 'CRITICAL', msg: 'Heavy Airstrike Reported', lat: 31.40, lon: 34.40, time: 'LIVE' },
     { id: 1, type: 'GNSS_ANOMALY', severity: 'HIGH', msg: 'High Interference (NACp < 4)', lat: 34.05, lon: -118.24, time: '10:42:05 UTC' },
-    { id: 2, type: 'SEISMIC_TREMOR', severity: 'CRITICAL', msg: 'Shallow Tremor (Depth 0.5km)', lat: 35.68, lon: 139.76, time: '10:40:12 UTC' },
+    { id: 2, type: 'SEISMIC_TREMOR', severity: 'HIGH', msg: 'Shallow Tremor (Depth 0.5km)', lat: 35.68, lon: 139.76, time: '10:40:12 UTC' },
     { id: 3, type: 'BGP_OUTAGE', severity: 'MEDIUM', msg: 'Routing Anomaly Detected', lat: 51.5, lon: -0.12, time: '10:35:00 UTC' }
   ]);
 

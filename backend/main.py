@@ -63,3 +63,10 @@ async def websocket_endpoint(websocket: WebSocket):
     except Exception as e:
         logger.error(f"WebSocket error: {e}")
         manager.disconnect(websocket)
+
+from modules.conflict_heatmap import fetch_conflict_data
+
+@app.get("/api/v1/telemetry/conflict")
+async def get_conflict_heatmap():
+    data = await fetch_conflict_data()
+    return data

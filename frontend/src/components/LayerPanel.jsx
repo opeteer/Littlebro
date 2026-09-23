@@ -5,6 +5,12 @@ const LayerPanel = ({ activeLayers, toggleLayer }) => {
 
   const modules = [
     {
+      category: '⚔️ Konflik Bersenjata & Perang',
+      items: [
+        { id: 'war', name: 'War & Conflict Heatmap', count: 'LIVE' },
+      ]
+    },
+    {
       category: 'Transportasi & Navigasi',
       items: [
         { id: 'aviation', name: 'Aviation Tracker', count: 420 },
