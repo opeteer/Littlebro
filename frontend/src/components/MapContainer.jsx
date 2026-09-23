@@ -450,25 +450,35 @@ const MapContainer = ({ focusedLocation, activeLayers, streamMessage, onOpenVide
         }
       });
 
-      setupHover('conflict-circles', (p) => `
-        <div style="color:#ff4444; font-weight:bold;">⚔️ WAR ZONE: ${p.name}</div>
-        <div>Event: ${p.event_type}</div>
-        <div>Intensity: ${((p.intensity || 0.8) * 100).toFixed(0)}%</div>
-        <div style="color:#9ca3af; font-size:9px;">Source: ${p.source || 'Live Telemetry'} (${p.time})</div>
-        <div style="color:#ff4444; font-size:9px; margin-top:2px;">[Click for War Zone Stream 🎥]</div>
-      `);
+      setupHover('conflict-circles', (p) => {
+        const isConflict = p.is_conflict_zone !== false && p.category_type !== 'INDUSTRIAL' && p.category_type !== 'WILDFIRE';
+        const icon = p.icon || (isConflict ? '⚔️' : p.category_type === 'INDUSTRIAL' ? '🏭' : '🌲');
+        const badge = p.badge || (isConflict ? 'WAR ZONE IMPACT' : 'THERMAL ANOMALY');
+        const color = isConflict ? '#ff4444' : '#ffaa00';
+        const streamHint = isConflict ? '[Click for War Zone Stream 🎥]' : '[Click for NASA Satellite Stream 🎥]';
+
+        return `
+          <div style="color:${color}; font-weight:bold;">${icon} ${badge}: ${p.name}</div>
+          <div>Event: ${p.event_type || 'Thermal Anomaly'}</div>
+          <div>Intensity: ${((p.intensity || 0.8) * 100).toFixed(0)}% ${p.frp ? `(${p.frp} MW)` : ''}</div>
+          <div style="color:#9ca3af; font-size:9px;">Source: ${p.source || 'NASA Satellite'} (${p.time})</div>
+          <div style="color:${color}; font-size:9px; margin-top:2px;">${streamHint}</div>
+        `;
+      });
 
       map.on('click', 'conflict-circles', (e) => {
         if (!e.features || !e.features.length) return;
         const p = e.features[0].properties;
+        const isConflict = p.is_conflict_zone !== false && p.category_type !== 'INDUSTRIAL' && p.category_type !== 'WILDFIRE';
+
         if (onOpenVideo) {
           onOpenVideo({
-            type: 'war',
-            event_type: p.event_type || 'Airstrike',
+            type: isConflict ? 'war' : 'thermal',
+            event_type: p.event_type || (isConflict ? 'Airstrike Impact' : 'Industrial Thermal Anomaly'),
             title: `${p.name}: ${p.event_type}`,
             location: p.name,
             time: p.time,
-            source: p.source || "Al Jazeera / OSINT Stream"
+            source: p.source || (isConflict ? "Al Jazeera / OSINT Stream" : "NASA TV Satellite Stream")
           });
         }
       });
