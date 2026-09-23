@@ -7,10 +7,13 @@ import AlertFeed from './components/AlertFeed';
 import LiveTicker from './components/LiveTicker';
 import MapLegend from './components/MapLegend';
 
+import NewsVideoModal from './components/NewsVideoModal';
+import MediaPerceptionWidget from './components/MediaPerceptionWidget';
 import { useWebSocketStream } from './hooks/useWebSocketStream';
 
 function App() {
   const [focusedLocation, setFocusedLocation] = useState(null);
+  const [videoModalData, setVideoModalData] = useState(null);
   const { isConnected, lastMessage } = useWebSocketStream();
   const [activeLayers, setActiveLayers] = useState({
     earthquakes: true,
@@ -32,11 +35,16 @@ function App() {
       
       {/* Side Panels */}
       <LayerPanel activeLayers={activeLayers} toggleLayer={toggleLayer} />
-      <AlertFeed onAlertClick={setFocusedLocation} streamMessage={lastMessage} />
+      <AlertFeed 
+        onAlertClick={setFocusedLocation} 
+        onOpenVideo={(data) => setVideoModalData(data)}
+        streamMessage={lastMessage} 
+      />
       
-      {/* Bottom Tools & Legend */}
+      {/* Bottom Tools, Legend & Perception Widget */}
       <PhotogrammetryDesk />
       <MapLegend />
+      <MediaPerceptionWidget />
 
       {/* Main Map */}
       <div className="flex-1 relative z-0">
@@ -44,11 +52,18 @@ function App() {
           focusedLocation={focusedLocation} 
           activeLayers={activeLayers} 
           streamMessage={lastMessage}
+          onOpenVideo={(data) => setVideoModalData(data)}
         />
       </div>
 
       {/* Bottom Ticker */}
       <LiveTicker streamMessage={lastMessage} />
+
+      {/* News Video Pop-Up Window */}
+      <NewsVideoModal 
+        videoData={videoModalData} 
+        onClose={() => setVideoModalData(null)} 
+      />
     </div>
   );
 }

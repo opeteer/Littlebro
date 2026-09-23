@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const AlertFeed = ({ onAlertClick, streamMessage }) => {
+const AlertFeed = ({ onAlertClick, onOpenVideo, streamMessage }) => {
   const [alerts, setAlerts] = useState([
     { id: 'default-0', type: 'WAR_ZONE', severity: 'CRITICAL', msg: 'Heavy Airstrike Reported', lat: 31.40, lon: 34.40, time: 'LIVE' },
     { id: 'default-1', type: 'GNSS_ANOMALY', severity: 'HIGH', msg: 'High Interference (NACp < 4)', lat: 34.05, lon: -118.24, time: '10:42:05 UTC' },
@@ -13,7 +13,6 @@ const AlertFeed = ({ onAlertClick, streamMessage }) => {
     if (streamMessage.type === 'TELEMETRY_UPDATE' && streamMessage.data?.features) {
       const feats = streamMessage.data.features;
       if (feats.length > 0) {
-        // Pick the top intensity event to create a live dynamic alert
         const topFeat = feats[0];
         const { name, event_type, time } = topFeat.properties;
         const [lon, lat] = topFeat.geometry.coordinates;
@@ -42,15 +41,31 @@ const AlertFeed = ({ onAlertClick, streamMessage }) => {
         return (
           <div 
             key={alert.id}
-            onClick={() => onAlertClick({ lat: alert.lat, lon: alert.lon, zoom: 10 })}
             className={`border p-2 px-3 rounded text-white backdrop-blur-sm animate-pulse cursor-pointer hover:bg-gray-800 transition-colors flex flex-col ${bgClass}`}
           >
-            <div className="flex justify-between items-center">
+            <div 
+              onClick={() => onAlertClick({ lat: alert.lat, lon: alert.lon, zoom: 10 })}
+              className="flex justify-between items-center"
+            >
               <span className="text-[10px] font-bold tracking-wider">{alert.type}</span>
               <span className="text-[9px] opacity-80">{alert.time}</span>
             </div>
-            <span className="text-xs mt-1">{alert.msg}</span>
-            <span className="text-[9px] mt-1 opacity-70">📍 [{alert.lat.toFixed(2)}, {alert.lon.toFixed(2)}]</span>
+            <span onClick={() => onAlertClick({ lat: alert.lat, lon: alert.lon, zoom: 10 })} className="text-xs mt-1">{alert.msg}</span>
+            
+            <div className="flex justify-between items-center mt-2 border-t border-white/10 pt-1">
+              <span className="text-[9px] opacity-70">📍 [{alert.lat.toFixed(2)}, {alert.lon.toFixed(2)}]</span>
+              {onOpenVideo && (
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onOpenVideo({ title: alert.msg, location: `${alert.lat.toFixed(2)}, ${alert.lon.toFixed(2)}`, time: alert.time, source: "Live OSINT Network" });
+                  }}
+                  className="text-[9px] bg-red-600/80 hover:bg-red-500 text-white px-2 py-0.5 rounded font-bold transition-colors flex items-center gap-1"
+                >
+                  🎥 Watch Stream
+                </button>
+              )}
+            </div>
           </div>
         );
       })}

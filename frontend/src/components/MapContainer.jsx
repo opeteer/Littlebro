@@ -157,7 +157,7 @@ const NEWS_GEOJSON = {
   ]
 };
 
-const MapContainer = ({ focusedLocation, activeLayers, streamMessage }) => {
+const MapContainer = ({ focusedLocation, activeLayers, streamMessage, onOpenVideo }) => {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const [crosshair, setCrosshair] = useState({ lat: '0.0000', lon: '0.0000' });
@@ -421,7 +421,21 @@ const MapContainer = ({ focusedLocation, activeLayers, streamMessage }) => {
         <div>Event: ${p.event_type}</div>
         <div>Intensity: ${((p.intensity || 0.8) * 100).toFixed(0)}%</div>
         <div style="color:#9ca3af; font-size:9px;">Source: ${p.source || 'Live Telemetry'} (${p.time})</div>
+        <div style="color:#ffaa00; font-size:9px; margin-top:2px;">[Click to Watch Video Stream 🎥]</div>
       `);
+
+      map.on('click', 'conflict-circles', (e) => {
+        if (!e.features || !e.features.length) return;
+        const p = e.features[0].properties;
+        if (onOpenVideo) {
+          onOpenVideo({
+            title: `${p.name}: ${p.event_type}`,
+            location: p.name,
+            time: p.time,
+            source: p.source || "Live OSINT Stream"
+          });
+        }
+      });
 
       setupHover('firms-circles', (p) => `
         <div style="color:#ff6600; font-weight:bold;">🔥 THERMAL ANOMALY</div>

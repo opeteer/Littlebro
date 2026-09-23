@@ -81,7 +81,14 @@ async def telemetry_broadcast_loop():
         except Exception as e:
             logger.error(f"Error broadcasting telemetry stream: {e}")
 
+from modules.perception_analyzer import get_media_perception_analytics
+
 @app.get("/api/v1/telemetry/conflict")
 async def get_conflict_heatmap():
     data = await get_dynamic_conflict_geojson()
+    return data
+
+@app.get("/api/v1/telemetry/perception")
+async def get_perception():
+    data = await get_media_perception_analytics()
     return data
