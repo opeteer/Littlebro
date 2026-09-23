@@ -17,6 +17,10 @@ function App() {
   const [focusedLocation, setFocusedLocation] = useState(null);
   const [videoModalData, setVideoModalData] = useState(null);
   const [isLogModalOpen, setIsLogModalOpen] = useState(false);
+  const [isPickingOnMap, setIsPickingOnMap] = useState(false);
+  const [pickedCoords, setPickedCoords] = useState(null);
+  const [shadowVector, setShadowVector] = useState(null);
+
   const { isConnected, lastMessage } = useWebSocketStream();
   const [activeLayers, setActiveLayers] = useState({
     earthquakes: true,
@@ -48,7 +52,12 @@ function App() {
       />
       
       {/* Bottom Tools, Legend & Perception Widget */}
-      <PhotogrammetryDesk />
+      <PhotogrammetryDesk 
+        isPickingOnMap={isPickingOnMap}
+        onTogglePickOnMap={() => setIsPickingOnMap(!isPickingOnMap)}
+        pickedCoords={pickedCoords}
+        onCalculateShadow={(vectorData) => setShadowVector(vectorData)}
+      />
       <MapLegend />
       <MediaPerceptionWidget />
 
@@ -59,6 +68,12 @@ function App() {
           activeLayers={activeLayers} 
           streamMessage={lastMessage}
           onOpenVideo={(data) => setVideoModalData(data)}
+          isPickingOnMap={isPickingOnMap}
+          onMapPointPicked={(coords) => {
+            setPickedCoords(coords);
+            setIsPickingOnMap(false);
+          }}
+          shadowVector={shadowVector}
         />
       </div>
 

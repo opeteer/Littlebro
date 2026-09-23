@@ -157,11 +157,25 @@ const NEWS_GEOJSON = {
   ]
 };
 
-const MapContainer = ({ focusedLocation, activeLayers, streamMessage, onOpenVideo }) => {
+const MapContainer = ({ 
+  focusedLocation, 
+  activeLayers, 
+  streamMessage, 
+  onOpenVideo,
+  isPickingOnMap,
+  onMapPointPicked,
+  shadowVector
+}) => {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const [crosshair, setCrosshair] = useState({ lat: '0.0000', lon: '0.0000' });
   const hoverPopupRef = useRef(null);
+
+  // Refs for event listeners
+  const isPickingRef = useRef(isPickingOnMap);
+  const onPointPickedRef = useRef(onMapPointPicked);
+  isPickingRef.current = isPickingOnMap;
+  onPointPickedRef.current = onMapPointPicked;
 
   // Handle live dynamic WebSocket stream updates (Zero-Refresh)
   useEffect(() => {
@@ -173,6 +187,69 @@ const MapContainer = ({ focusedLocation, activeLayers, streamMessage, onOpenVide
       }
     }
   }, [streamMessage]);
+
+  // Handle Map Point Pick Cursor & Click Event
+  useEffect(() => {
+    if (!mapRef.current) return;
+    const map = mapRef.current;
+
+    const onMapClick = (e) => {
+      if (isPickingRef.current && onPointPickedRef.current) {
+        onPointPickedRef.current({ lat: e.lngLat.lat, lon: e.lngLat.lng });
+      }
+    };
+
+    if (isPickingOnMap) {
+      map.getCanvas().style.cursor = 'crosshair';
+      map.on('click', onMapClick);
+    }
+
+    return () => {
+      map.off('click', onMapClick);
+    };
+  }, [isPickingOnMap]);
+
+  // Handle Photogrammetry Shadow Vector Drawing
+  useEffect(() => {
+    if (!mapRef.current || !shadowVector) return;
+    const map = mapRef.current;
+    if (!map.isStyleLoaded() || !map.getSource('photogrammetry-shadow-source')) return;
+
+    const geojson = {
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          geometry: {
+            type: 'LineString',
+            coordinates: [
+              [shadowVector.startLon, shadowVector.startLat],
+              [shadowVector.endLon, shadowVector.endLat]
+            ]
+          },
+          properties: { name: 'Shadow Vector' }
+        },
+        {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [shadowVector.startLon, shadowVector.startLat]
+          },
+          properties: { name: 'Target Origin' }
+        }
+      ]
+    };
+
+    map.getSource('photogrammetry-shadow-source').setData(geojson);
+
+    // Camera flyTo photogrammetry target
+    map.flyTo({
+      center: [shadowVector.startLon, shadowVector.startLat],
+      zoom: 14,
+      pitch: 50,
+      essential: true
+    });
+  }, [shadowVector]);
 
   useEffect(() => {
     if (mapRef.current) return;
@@ -201,6 +278,10 @@ const MapContainer = ({ focusedLocation, activeLayers, streamMessage, onOpenVide
       const initialConflictGeoJSON = await fetchLiveConflictGeoJSON();
 
       // --- DATA SOURCES ---
+      map.addSource('photogrammetry-shadow-source', {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: [] }
+      });
       map.addSource('conflict-events', { type: 'geojson', data: initialConflictGeoJSON });
       map.addSource('aviation-events', { type: 'geojson', data: AVIATION_GEOJSON });
       map.addSource('aviation-routes', { type: 'geojson', data: AVIATION_ROUTES_GEOJSON });
@@ -219,6 +300,32 @@ const MapContainer = ({ focusedLocation, activeLayers, streamMessage, onOpenVide
       });
 
       // --- LAYERS ---
+
+      // Photogrammetry Shadow Vector Line Layer
+      map.addLayer({
+        id: 'photogrammetry-shadow-line',
+        type: 'line',
+        source: 'photogrammetry-shadow-source',
+        paint: {
+          'line-color': '#ffb700',
+          'line-width': 4,
+          'line-dasharray': [2, 1]
+        }
+      });
+
+      // Photogrammetry Target Marker Circle
+      map.addLayer({
+        id: 'photogrammetry-shadow-points',
+        type: 'circle',
+        source: 'photogrammetry-shadow-source',
+        filter: ['==', '$type', 'Point'],
+        paint: {
+          'circle-color': '#ffb700',
+          'circle-radius': 8,
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#ffffff'
+        }
+      });
 
       // GNSS Jamming Layer
       map.addLayer({
