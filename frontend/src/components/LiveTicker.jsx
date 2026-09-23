@@ -1,15 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-const LiveTicker = () => {
-  const newsItems = [
+const LiveTicker = ({ streamMessage }) => {
+  const [newsItems, setNewsItems] = useState([
+    "STREAM: Live WebSocket connection active",
     "CONFLICT: GDELT reports intense artillery shelling in Eastern Front",
     "OPEN-SKY: VIP Flight HXZ-99 detected deviating from flight path at 10:45Z",
     "CONFLICT: Urban combat escalated in Khartoum sector 4",
     "SEISMIC: USGS confirms depth 0.2km tremor in industrial zone",
     "BGP: Traffic drop 45% observed in Eastern Europe routing nodes",
-    "THERMAL: NASA FIRMS reports 15 new hotspots exceeding 500MW FRP",
-    "SOCIAL: 'Pizza Indicator' Z-Score +3.2 at Central Admin Building"
-  ];
+    "THERMAL: NASA FIRMS reports 15 new hotspots exceeding 500MW FRP"
+  ]);
+
+  useEffect(() => {
+    if (!streamMessage) return;
+    if (streamMessage.type === 'TELEMETRY_UPDATE' && streamMessage.data?.features) {
+      const feats = streamMessage.data.features;
+      if (feats.length > 0) {
+        const randomFeat = feats[Math.floor(Math.random() * feats.length)];
+        const { name, event_type, time, source } = randomFeat.properties;
+        const newItem = `${source || 'STREAM'}: ${name} - ${event_type} (${time || 'NOW'})`;
+
+        setNewsItems(prev => [newItem, ...prev.slice(0, 6)]);
+      }
+    }
+  }, [streamMessage]);
 
   return (
     <div className="w-full bg-black/90 border-t border-hud-border h-8 flex items-center overflow-hidden z-20 pointer-events-auto shrink-0 relative">

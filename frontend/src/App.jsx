@@ -7,8 +7,11 @@ import AlertFeed from './components/AlertFeed';
 import LiveTicker from './components/LiveTicker';
 import MapLegend from './components/MapLegend';
 
+import { useWebSocketStream } from './hooks/useWebSocketStream';
+
 function App() {
   const [focusedLocation, setFocusedLocation] = useState(null);
+  const { isConnected, lastMessage } = useWebSocketStream();
   const [activeLayers, setActiveLayers] = useState({
     earthquakes: true,
     war: true,
@@ -25,11 +28,11 @@ function App() {
 
   return (
     <div className="w-screen h-screen relative bg-hud-bg overflow-hidden flex flex-col">
-      <HUDOverlay />
+      <HUDOverlay isWsConnected={isConnected} />
       
       {/* Side Panels */}
       <LayerPanel activeLayers={activeLayers} toggleLayer={toggleLayer} />
-      <AlertFeed onAlertClick={setFocusedLocation} />
+      <AlertFeed onAlertClick={setFocusedLocation} streamMessage={lastMessage} />
       
       {/* Bottom Tools & Legend */}
       <PhotogrammetryDesk />
@@ -37,11 +40,15 @@ function App() {
 
       {/* Main Map */}
       <div className="flex-1 relative z-0">
-        <MapContainer focusedLocation={focusedLocation} activeLayers={activeLayers} />
+        <MapContainer 
+          focusedLocation={focusedLocation} 
+          activeLayers={activeLayers} 
+          streamMessage={lastMessage}
+        />
       </div>
 
       {/* Bottom Ticker */}
-      <LiveTicker />
+      <LiveTicker streamMessage={lastMessage} />
     </div>
   );
 }

@@ -20,8 +20,9 @@ async def lifespan(app: FastAPI):
     # Start background scheduler
     scheduler.start_scheduler()
     
-    # Start heartbeat loop
+    # Start heartbeat loop & telemetry broadcast
     asyncio.create_task(manager.heartbeat_loop())
+    asyncio.create_task(telemetry_broadcast_loop())
     
     yield
     # Shutdown
@@ -65,6 +66,20 @@ async def websocket_endpoint(websocket: WebSocket):
         manager.disconnect(websocket)
 
 from modules.conflict_live_aggregator import get_dynamic_conflict_geojson
+
+async def telemetry_broadcast_loop():
+    logger.info("Starting live telemetry WebSocket broadcast loop...")
+    while True:
+        await asyncio.sleep(10)
+        try:
+            conflict_geojson = await get_dynamic_conflict_geojson()
+            await manager.broadcast({
+                "type": "TELEMETRY_UPDATE",
+                "module": "conflict",
+                "data": conflict_geojson
+            })
+        except Exception as e:
+            logger.error(f"Error broadcasting telemetry stream: {e}")
 
 @app.get("/api/v1/telemetry/conflict")
 async def get_conflict_heatmap():

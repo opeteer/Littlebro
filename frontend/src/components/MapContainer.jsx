@@ -157,11 +157,22 @@ const NEWS_GEOJSON = {
   ]
 };
 
-const MapContainer = ({ focusedLocation, activeLayers }) => {
+const MapContainer = ({ focusedLocation, activeLayers, streamMessage }) => {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const [crosshair, setCrosshair] = useState({ lat: '0.0000', lon: '0.0000' });
   const hoverPopupRef = useRef(null);
+
+  // Handle live dynamic WebSocket stream updates (Zero-Refresh)
+  useEffect(() => {
+    if (!mapRef.current || !streamMessage) return;
+    if (streamMessage.type === 'TELEMETRY_UPDATE' && streamMessage.module === 'conflict') {
+      const map = mapRef.current;
+      if (map.getSource('conflict-events')) {
+        map.getSource('conflict-events').setData(streamMessage.data);
+      }
+    }
+  }, [streamMessage]);
 
   useEffect(() => {
     if (mapRef.current) return;
