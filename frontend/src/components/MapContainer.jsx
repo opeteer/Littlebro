@@ -29,7 +29,7 @@ const AVIATION_GEOJSON = {
     { type: "Feature", geometry: { type: "Point", coordinates: [2.35, 48.85] }, properties: { callsign: "AF-022", aircraft: "B777-300ER", alt: "38,000 ft", spd: "510 kts", route: "CDG -> NRT" } },
     { type: "Feature", geometry: { type: "Point", coordinates: [-0.12, 51.50] }, properties: { callsign: "BA-117", aircraft: "B787-9", alt: "34,000 ft", spd: "465 kts", route: "LHR -> JFK" } },
     { type: "Feature", geometry: { type: "Point", coordinates: [55.27, 25.20] }, properties: { callsign: "EK-201", aircraft: "A380-800", alt: "40,000 ft", spd: "525 kts", route: "DXB -> LAX" } },
-    { type: "Feature", geometry: { type: "Point", coordinates: [106.84, -6.20] }, properties: { callsign: "GA-88', aircraft: "B777-300", alt: "35,000 ft", spd: "490 kts", route: "CGK -> AMS" } },
+    { type: "Feature", geometry: { type: "Point", coordinates: [106.84, -6.20] }, properties: { callsign: "GA-88", aircraft: "B777-300", alt: "35,000 ft", spd: "490 kts", route: "CGK -> AMS" } },
     { type: "Feature", geometry: { type: "Point", coordinates: [139.69, 35.68] }, properties: { callsign: "JL-006", aircraft: "A350-1000", alt: "37,000 ft", spd: "505 kts", route: "HND -> JFK" } },
     { type: "Feature", geometry: { type: "Point", coordinates: [37.61, 55.75] }, properties: { callsign: "SU-212", aircraft: "A330-300", alt: "33,000 ft", spd: "470 kts", route: "SVO -> DEL" } },
     { type: "Feature", geometry: { type: "Point", coordinates: [77.20, 28.61] }, properties: { callsign: "AI-101", aircraft: "B787-8", alt: "39,000 ft", spd: "495 kts", route: "DEL -> LHR" } }
